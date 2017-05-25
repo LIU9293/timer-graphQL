@@ -3,17 +3,21 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 import cors from 'cors';
 import bodyParser from 'body-parser';
+import methodOverride from 'method-override';
 import graphqlHTTP from 'express-graphql';
 import { buildSchema } from 'graphql';
 import { rootSchema } from './server/schema';
-import { getUser } from './server/objects';
+import { getUser, createUser } from './server/objects';
+
+import './server/db';
 
 // Construct a schema, using GraphQL schema language
 const schema = buildSchema(rootSchema);
 
 // The root provides a resolver function for each API endpoint
 const rootValue = {
-  getUser: ({UserID}) => getUser(UserID)
+  getUser: ({UserID}) => getUser(UserID),
+  createUser: ({UserInput}) => createUser(UserInput)
 };
 
 const app = express();

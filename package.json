@@ -30,6 +30,7 @@
     "rosie": "^1.6.0"
   },
   "devDependencies": {
+    "babel-polyfill": "^6.23.0",
     "babel-preset-env": "^1.5.1",
     "babel-register": "^6.24.1"
   }

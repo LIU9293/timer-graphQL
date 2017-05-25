@@ -5,7 +5,7 @@ export const Basic = Factory.define('UserBasic')
   .attrs({
     uid: () => faker.random.uuid(),
     age: () => faker.random.number(20),
-    name: () => faker.name.findName(),
+    username: () => faker.name.findName(),
     avatar: () => faker.internet.avatar(),
     email: () => faker.internet.exampleEmail(),
     username: () => faker.internet.userName(),

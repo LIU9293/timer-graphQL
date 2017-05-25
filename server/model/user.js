@@ -49,6 +49,13 @@ const UserSchema = new Schema({
   },
   avatar: {
     type: String
+  },
+  wx_id: {
+    type: String
+  },
+  create_at: {
+    type: Date,
+    default: Date.now
   }
 }, {
   timestamps: true,
@@ -99,25 +106,7 @@ UserSchema
     return password.length >= 6 && password.match(/\d+/g);
   }, 'Password be at least 6 characters long and contain 1 number.');
 
-UserSchema
-  .pre('save', (done) => {
-    // Encrypt password before saving the document
-    if (this.isModified('password')) {
-      this.createHash(this.password, SALT, (err, hash) => {
-        this.password = hash;
-        done();
-      });
-    } else {
-      done();
-    }
-    // eslint-enable no-invalid-this
-  });
-
 UserSchema.methods = {
-  getPosts() {
-    return Post.find({ _user: this._id });
-  },
-
   /**
    * Authenticate - check if the passwords are the same
    * @public
@@ -152,6 +141,6 @@ UserSchema.methods = {
   },
 };
 
-  const UserModel = mongoose.model('User', UserSchema);
+const UserModel = mongoose.model('User', UserSchema);
 
-  export default UserModel;
+export default UserModel;
