@@ -6,7 +6,7 @@ import bodyParser from 'body-parser';
 import methodOverride from 'method-override';
 import graphqlHTTP from 'express-graphql';
 import { buildSchema } from 'graphql';
-import { rootSchema } from './server/schema';
+import rootSchema from './server/schema';
 import { getUser, createUser } from './server/objects';
 
 import './server/db';

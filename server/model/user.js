@@ -52,10 +52,6 @@ const UserSchema = new Schema({
   },
   wx_id: {
     type: String
-  },
-  create_at: {
-    type: Date,
-    default: Date.now
   }
 }, {
   timestamps: true,
@@ -98,6 +94,19 @@ UserSchema
         respond(false);
       });
   }, 'Username already taken.');
+
+// Validate mobile is not taken
+UserSchema
+  .path('mobile')
+  .validate((mobile, respond) => {
+    UserModel.findOne({ mobile })
+      .then((user) => {
+        respond(user ? false : true);
+      })
+      .catch(() => {
+        respond(false);
+      });
+  }, 'Mobile already taken.');
 
 // Validate password field
 UserSchema
