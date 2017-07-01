@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 const SESSION_SECRET = "SESSION_SECRET";
 const SALT = 12;
+mongoose.Promise = global.Promise;
 
 const Schema = mongoose.Schema;
 
@@ -10,7 +11,6 @@ const UserSchema = new Schema({
   username: {
     type: String,
     unique: true,
-    required: [true, 'Username is required.'],
   },
   email: {
     type: String,
@@ -67,6 +67,27 @@ UserSchema.set('toJSON', {
     delete obj.password;
     return obj;
   },
+});
+
+UserSchema.pre('save', function(next) {
+    var user = this;
+
+    // only hash the password if it has been modified (or is new)
+    if (!user.isModified('password')) return next();
+
+    // generate a salt
+    bcrypt.genSalt(SALT, function(err, salt) {
+        if (err) return next(err);
+
+        // hash the password along with our new salt
+        bcrypt.hash(user.password, salt, function(err, hash) {
+            if (err) return next(err);
+
+            // override the cleartext password with the hashed one
+            user.password = hash;
+            next();
+        });
+    });
 });
 
 // Ensure email has not been taken

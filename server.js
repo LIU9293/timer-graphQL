@@ -7,7 +7,7 @@ import methodOverride from 'method-override';
 import graphqlHTTP from 'express-graphql';
 import { buildSchema } from 'graphql';
 import rootSchema from './server/schema';
-import { getUser, createUser } from './server/objects';
+import { getUser, createUser, validateUser } from './server/objects';
 
 import './server/db';
 
@@ -17,7 +17,8 @@ const schema = buildSchema(rootSchema);
 // The root provides a resolver function for each API endpoint
 const rootValue = {
   getUser: ({UserID}) => getUser(UserID),
-  createUser: ({UserInput}) => createUser(UserInput)
+  createUser: ({UserInput}) => createUser(UserInput),
+  validateUser: ({UserInput}) => validateUser(UserInput)
 };
 
 const app = express();

@@ -1,5 +1,7 @@
 import UserSchema from './user';
 
-export default const rootSchema = `
+const rootSchema = `
   ${UserSchema}
 `;
+
+export default rootSchema;

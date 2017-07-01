@@ -1,6 +1,6 @@
-export default const UserSchema = `
+const UserSchema = `
   type User {
-    uid: String
+    id: String
     username: String
     avatar: String
     email: String
@@ -10,8 +10,9 @@ export default const UserSchema = `
     wx_id: String
   }
 
-  type UpdateUserMessage {
+  type UserMessage {
     success: Boolean!
+    error: String
     user: User
   }
 
@@ -23,10 +24,13 @@ export default const UserSchema = `
   }
 
   type Query {
-    getUser(UserID: Int!): User
+    getUser(id: String!): User
   }
 
   type Mutation {
-    createUser(UserInput: UserInput): UpdateUserMessage
+    validateUser(UserInput: UserInput): UserMessage
+    createUser(UserInput: UserInput): UserMessage
   }
 `;
+
+export default UserSchema;
