@@ -1,6 +1,6 @@
 const UserSchema = `
   type User {
-    id: String
+    _id: String
     username: String
     avatar: String
     email: String
@@ -14,6 +14,7 @@ const UserSchema = `
     success: Boolean!
     error: String
     user: User
+    token: String
   }
 
   input UserInput {
@@ -24,12 +25,13 @@ const UserSchema = `
   }
 
   type Query {
-    getUser(id: String!): User
+    getUserInfoByToken(token: String!): UserMessage
   }
 
   type Mutation {
-    validateUser(UserInput: UserInput): UserMessage
-    createUser(UserInput: UserInput): UserMessage
+    validateUser(UserInput: UserInput!): UserMessage
+    createUser(UserInput: UserInput!): UserMessage
+    updateUser(field: String!, value: String!, token: String!): UserMessage
   }
 `;
 

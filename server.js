@@ -7,7 +7,7 @@ import methodOverride from 'method-override';
 import graphqlHTTP from 'express-graphql';
 import { buildSchema } from 'graphql';
 import rootSchema from './server/schema';
-import { getUser, createUser, validateUser } from './server/objects';
+import { getUserInfoByToken, createUser, validateUser, updateUser } from './server/objects';
 
 import './server/db';
 
@@ -16,9 +16,10 @@ const schema = buildSchema(rootSchema);
 
 // The root provides a resolver function for each API endpoint
 const rootValue = {
-  getUser: ({UserID}) => getUser(UserID),
+  getUserInfoByToken: ({token}) => getUserInfoByToken(token),
   createUser: ({UserInput}) => createUser(UserInput),
-  validateUser: ({UserInput}) => validateUser(UserInput)
+  validateUser: ({UserInput}) => validateUser(UserInput),
+  updateUser: ({field, value, token}) => updateUser(field, value, token)
 };
 
 const app = express();
@@ -33,7 +34,7 @@ app.use(cors());
 
 // Request logger
 // https://github.com/expressjs/morgan
-app.use(morgan('combined'));
+// app.use(morgan('combined'));
 
 // Parse incoming request bodies
 // https://github.com/expressjs/body-parser
