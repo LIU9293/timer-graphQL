@@ -24,6 +24,12 @@ const UserSchema = `
     password: String
   }
 
+  type EmailResponse {
+    success: Boolean!
+    error: String
+    response: String
+  }
+
   type Query {
     getUserInfoByToken(token: String!): UserMessage
   }
@@ -32,6 +38,7 @@ const UserSchema = `
     validateUser(UserInput: UserInput!): UserMessage
     createUser(UserInput: UserInput!): UserMessage
     updateUser(field: String!, value: String!, token: String!): UserMessage
+    sendActivateEmail(email: String!): EmailResponse
   }
 `;
 

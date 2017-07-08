@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { sendActivateEmail } from '../util/mail';
 const SESSION_SECRET = "SESSION_SECRET";
 const SALT = 12;
 mongoose.Promise = global.Promise;
@@ -154,6 +155,17 @@ UserSchema.methods = {
     return jwt.sign({ _id: this._id }, SESSION_SECRET, {
       expiresIn: 60 * 60 * 24 * 7,
     });
+  },
+
+
+  /**
+   * send an activated email after user register
+   */
+  sendActivateEmail() {
+    const token = jwt.sign({ _id: this._id, email: this.email }, SESSION_SECRET, {
+      expiresIn: 60 * 60,
+    });
+    return sendActivateEmail(this.email, token);
   },
 
   /**

@@ -1,5 +1,4 @@
 import chalk from 'chalk';
-import { UserFactory } from '../faker';
 import User from '../model/user';
 import { verifyToken } from '../util/token';
 
@@ -15,6 +14,23 @@ const getUserInfoByToken = async (token) => {
     return {
       success: false,
       err: 'token cannot be recoginzed'
+    }
+  }
+}
+
+const sendActivateEmail = async (email) => {
+  try {
+    const user = await User.findOne({email});
+    const response = await user.sendActivateEmail();
+    return {
+      success: true,
+      response: JSON.stringify(response)
+    }
+  } catch (e) {
+    console.log(e);
+    return {
+      success: false,
+      error: e
     }
   }
 }
@@ -36,7 +52,7 @@ const createUser = async (user) => {
 }
 
 const updateUser = async (field, value, token) => {
-  const fieldsEnum = ['password', 'email', 'mobile', 'avatar'];
+  const fieldsEnum = ['password', 'email', 'mobile', 'avatar', 'activated'];
   if (fieldsEnum.indexOf(field) < 0 ) {
     return {
       success: false,
@@ -116,4 +132,5 @@ export {
   createUser,
   validateUser,
   updateUser,
+  sendActivateEmail,
 };

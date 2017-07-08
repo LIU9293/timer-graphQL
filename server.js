@@ -7,7 +7,7 @@ import methodOverride from 'method-override';
 import graphqlHTTP from 'express-graphql';
 import { buildSchema } from 'graphql';
 import rootSchema from './server/schema';
-import { getUserInfoByToken, createUser, validateUser, updateUser } from './server/objects';
+import { getUserInfoByToken, createUser, validateUser, updateUser, sendActivateEmail } from './server/objects';
 
 import './server/db';
 
@@ -19,7 +19,8 @@ const rootValue = {
   getUserInfoByToken: ({token}) => getUserInfoByToken(token),
   createUser: ({UserInput}) => createUser(UserInput),
   validateUser: ({UserInput}) => validateUser(UserInput),
-  updateUser: ({field, value, token}) => updateUser(field, value, token)
+  updateUser: ({field, value, token}) => updateUser(field, value, token),
+  sendActivateEmail: ({email}) => sendActivateEmail(email)
 };
 
 const app = express();
