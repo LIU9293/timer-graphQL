@@ -20,8 +20,14 @@ const getUserInfoByToken = async (token) => {
 
 const sendActivateEmail = async (email) => {
   try {
-    const user = await User.findOne({email});
-    const response = await user.sendActivateEmail();
+    const targetUser = await User.findOne({email});
+    if (targetUser.activated) {
+      return {
+        success: false,
+        error: 'user already activated'
+      }
+    }
+    const response = await targetUser.sendActivateEmail();
     return {
       success: true,
       response: JSON.stringify(response)
@@ -32,6 +38,29 @@ const sendActivateEmail = async (email) => {
       success: false,
       error: e
     }
+  }
+}
+
+const activiteUser = async (token, cb) => {
+  try {
+    const tokenUser = await verifyToken(token);
+    const { _id, email } = tokenUser;
+    const targetUser = await User.findOne({_id});
+    if (targetUser.email === email) {
+      await User.findOneAndUpdate({_id}, {
+        activated: true
+      });
+      const newUser = await User.findOne({_id});
+      cb({
+        success: true,
+        user: newUser,
+      });
+    }
+  } catch (e) {
+    cb({
+      success: false,
+      error: e
+    });
   }
 }
 
@@ -62,9 +91,12 @@ const updateUser = async (field, value, token) => {
   try {
     const res = await getUserInfoByToken(token);
     if (res.success) {
+      if (value === "true") value = true;
+      if (value === "false") value = false;
       let obj = {};
       obj[field] = value;
-      const newUser = await User.findOneAndUpdate({'_id': res.user._id}, obj);
+      await User.findOneAndUpdate({'_id': res.user._id}, obj);
+      const newUser = User.findOne({'_id': res.user._id});
       return {
         success: true,
         user: newUser
@@ -133,4 +165,5 @@ export {
   validateUser,
   updateUser,
   sendActivateEmail,
+  activiteUser,
 };

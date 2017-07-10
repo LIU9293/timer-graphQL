@@ -63,6 +63,7 @@ UserSchema.set('toJSON', {
   virtuals: true,
   transform(doc, obj) {
     delete obj.__v;
+    delete obj._id;
     delete obj.password;
     return obj;
   },
@@ -156,7 +157,6 @@ UserSchema.methods = {
       expiresIn: 60 * 60 * 24 * 7,
     });
   },
-
 
   /**
    * send an activated email after user register

@@ -2,7 +2,7 @@ import nodemailer from 'nodemailer';
 const key = 'fszltqeejpgfbjci';
 
 export function sendEmail(targetAddress, subject, html){
-  const smtpTransport = nodemailer.createTransport("SMTP",{
+  const smtpTransport = nodemailer.createTransport({
     host: 'smtp.qq.com',
     port: 465,
     secure: true,
@@ -34,13 +34,13 @@ export function sendEmail(targetAddress, subject, html){
 }
 
 export function sendActivateEmail(email, token) {
-  const activateLink = `localhost:3000/api/activate?token=${token}`;
+  const activateLink = `http://localhost:3000/rest/activate?token=${token}`;
   return sendEmail(email, 'Activite your email', `
-    <p>hello world!</p>
+    <p>欢迎注册</p>
     <div>
-      <Button>
-        <a target="_blank" href="${activateLink}">activate</a>
-      </Button>
+      <button>
+        <a target="_blank" href="${activateLink}">激活</a>
+      </button>
     </div>
   `);
 }

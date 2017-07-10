@@ -32,6 +32,7 @@ const UserSchema = `
 
   type Query {
     getUserInfoByToken(token: String!): UserMessage
+    activiteUser(token: String!): UserMessage
   }
 
   type Mutation {

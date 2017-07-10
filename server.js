@@ -7,7 +7,14 @@ import methodOverride from 'method-override';
 import graphqlHTTP from 'express-graphql';
 import { buildSchema } from 'graphql';
 import rootSchema from './server/schema';
-import { getUserInfoByToken, createUser, validateUser, updateUser, sendActivateEmail } from './server/objects';
+import RestAPI from './api';
+import {
+  getUserInfoByToken,
+  createUser,
+  validateUser,
+  updateUser,
+  sendActivateEmail,
+} from './server/objects';
 
 import './server/db';
 
@@ -20,7 +27,7 @@ const rootValue = {
   createUser: ({UserInput}) => createUser(UserInput),
   validateUser: ({UserInput}) => validateUser(UserInput),
   updateUser: ({field, value, token}) => updateUser(field, value, token),
-  sendActivateEmail: ({email}) => sendActivateEmail(email)
+  sendActivateEmail: ({email}) => sendActivateEmail(email),
 };
 
 const app = express();
@@ -51,6 +58,8 @@ app.use('/graphql', graphqlHTTP({
   rootValue,
   graphiql: true,
 }));
+
+app.use('/rest', RestAPI);
 
 app.listen(3000);
 
